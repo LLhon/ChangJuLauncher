@@ -8,45 +8,40 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.changju.launcher.R
+import com.changju.launcher.databinding.ActivityMainBinding
 import com.changju.launcher.listener.OnEditDialogResultListener
 import com.changju.launcher.ui.dialog.InputPwdDialog
 import com.opensource.svgaplayer.SVGAImageView
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var mSvgaImageView: SVGAImageView
-    lateinit var mTvSetting: TextView
-    lateinit var mTvChangJu: TextView
+    private lateinit var mBinding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        mBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
 
         initView()
     }
 
     private fun initView() {
-        mSvgaImageView = findViewById(R.id.svga_view)
-        mTvSetting = findViewById(R.id.tv_setting)
-        mTvChangJu = findViewById(R.id.tv_changju)
 
-        mTvSetting.setOnClickListener {
+        mBinding.tvSetting.setOnClickListener {
             InputPwdDialog
                 .newInstance()
                 .setListener(object : OnEditDialogResultListener {
                     override fun onResult(result: String) {
-                        val intent = Intent(Settings.ACTION_SETTINGS)
-                        startActivity(intent)
+                        startActivity(Intent(Settings.ACTION_SETTINGS))
                     }
                 })
                 .show(supportFragmentManager, "DEMO_DIALOG")
         }
-        mTvChangJu.setOnClickListener {
+        mBinding.tvChangju.setOnClickListener {
             val intent = Intent()
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            val comp = ComponentName("com.newproject.hardqing",
+            intent.component = ComponentName("com.newproject.hardqing",
                 "com.newproject.hardqing.ui.ScanCodeActivity")
-            intent.component = comp
             intent.action = "android.intent.action.VIEW"
             startActivity(intent)
         }
